@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter</title>
+    <!-- Add your CSS styles or link to an external CSS file here -->
+    <link href="/path/to/output.css" rel="stylesheet">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Additional CSS styles for centering the box */
+        body {
+            background: linear-gradient(90deg, #3490dc 0%, #6cb2eb 100%);
+            font-family: Arial, sans-serif;
+        }
+
+        .center-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .convert-btn {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .convert-btn:hover {
+            background-color: #357abd;
+        }
+
+        /* Style for the input and output boxes */
+        .input-output-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .input-output-box:hover {
+            transform: scale(1.05);
+        }
+
+        /* Style for the header */
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Style for the title */
+        .title {
+            font-size: 2rem;
+            color: #3490dc;
+        }
+
+        /* Style for temperature units */
+        .unit-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Create a centered box -->
+    <div class="center-box">
+        <div class="container mx-auto p-8 bg-white rounded-lg shadow-lg input-output-box">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="title"><i class="fas fa-thermometer-half"></i> Temperature Converter</h1>
+                <p>Convert between different temperature units with ease.</p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="inputTemp">
+                    <i class="fas fa-thermometer-half"></i> Enter temperature
+                </label>
+                <input class="py-4 px-6 shadow appearance-none border rounded w-full text-xl text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="inputTemp" type="number" placeholder="Enter temperature">
+            </div>
+            <div class="mb-6 flex justify-between items-center">
+                <div class="w-1/2 mr-2">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 unit-label" for="fromUnit">From</label>
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fromUnit">
+                        <option value="celsius">Celsius</option>
+                        <option value="fahrenheit">Fahrenheit</option>
+                        <option value="kelvin">Kelvin</option>
+                        <option value="rankine">Rankine</option>
+                        <option value="reaumur">Reaumur</option>
+                    </select>
+                </div>
+                <div class="w-1/2 ml-2">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 unit-label" for="toUnit">To</label>
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="toUnit">
+                        <option value="celsius">Celsius</option>
+                        <option value="fahrenheit">Fahrenheit</option>
+                        <option value="kelvin">Kelvin</option>
+                        <option value="rankine">Rankine</option>
+                        <option value="reaumur">Reaumur</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="convert-btn" onclick="convertTemperature()"><i class="fas fa-sync-alt"></i> Convert</button>
+            </div>
+
+            <!-- Output Section -->
+            <div class="mt-6 text-center font-semibold text-lg output" id="result"></div>
+        </div>
+    </div>
+    <script>
+        const unitConverters = {
+            celsius: {
+                fahrenheit: (temp) => (temp * 9/5) + 32,
+                kelvin: (temp) => temp + 273.15,
+                rankine: (temp) => (temp + 273.15) * 9/5,
+                reaumur: (temp) => temp * 4/5,
+            },
+            fahrenheit: {
+                celsius: (temp) => (temp - 32) * 5/9,
+                kelvin: (temp) => (temp - 32) * 5/9 + 273.15,
+                rankine: (temp) => temp + 459.67,
+                reaumur: (temp) => (temp - 32) * 4/9,
+            },
+            kelvin: {
+                celsius: (temp) => temp - 273.15,
+                fahrenheit: (temp) => (temp - 273.15) * 9/5 + 32,
+                rankine: (temp) => temp * 1.8,
+                reaumur: (temp) => (temp - 273.15) * 4/5,
+            },
+            rankine: {
+                celsius: (temp) => (temp - 491.67) * 5/9,
+                fahrenheit: (temp) => temp - 459.67,
+                kelvin: (temp) => temp / 1.8,
+                reaumur: (temp) => (temp - 491.67) * 4/9,
+            },
+            reaumur: {
+                celsius: (temp) => temp * 5/4,
+                fahrenheit: (temp) => (temp * 9/4) + 32,
+                kelvin: (temp) => (temp * 5/4) + 273.15,
+                rankine: (temp) => (temp * 9/4) + 491.67,
+            },
+        };
+    
+        function convertTemperature() {
+            const inputTemp = parseFloat(document.getElementById('inputTemp').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            let result;
+    
+            if (fromUnit !== toUnit) {
+                result = unitConverters[fromUnit][toUnit](inputTemp);
+            } else {
+                result = inputTemp; // Same units, no conversion needed
+            }
+    
+            document.getElementById('result').innerText = `Result: ${result.toFixed(2)} ${toUnit}`;
+        }
+    </script>
+</body>
+</html>
